@@ -2,18 +2,23 @@ package com.fengjustin.custom;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 import android.widget.EditText;
 public class MainActivity extends AppCompatActivity {
     Button button0, button1, button2, button3, button4, button5, button6,
             button7, button8, button9, button10, divide, addition, subtract,
             multiply, clear, equal;
     EditText edittext;
-
+    EditText name;
+    TextView displayText;
+    Button submitButton;
     float one, two;
-
     boolean add, sub, mult, div;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,7 +42,24 @@ public class MainActivity extends AppCompatActivity {
         clear = findViewById(R.id.buttonC);
         equal =  findViewById(R.id.buttoneql);
         edittext =  findViewById(R.id.edit1);
-
+        name=findViewById(R.id.responseEditText);
+        displayText=findViewById(R.id.textBox);
+        submitButton=findViewById(R.id.clickButton);
+        final SharedPreferences sharedPreferences = getSharedPreferences("save_name", Context.MODE_PRIVATE);
+        String previous_name = sharedPreferences.getString("name", "");
+        if(!previous_name.equals("")){
+            displayText.setText("Hello " + previous_name + "!");
+        }
+        submitButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.i("testButton","Hi dad! "+name.getText());
+                SharedPreferences.Editor editor = sharedPreferences.edit();
+                editor.putString("name", ""+name.getText());
+                editor.apply();
+                displayText.setText("Hello " + name.getText() + "!");
+            }
+        });
         equal.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
