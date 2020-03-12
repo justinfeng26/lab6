@@ -10,6 +10,9 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.EditText;
+
+import com.google.gson.Gson;
+
 public class MainActivity extends AppCompatActivity {
     Button button0, button1, button2, button3, button4, button5, button6,
             button7, button8, button9, button10, divide, addition, subtract,
@@ -48,14 +51,16 @@ public class MainActivity extends AppCompatActivity {
         final SharedPreferences sharedPreferences = getSharedPreferences("save_name", Context.MODE_PRIVATE);
         String previous_name = sharedPreferences.getString("name", "");
         if(!previous_name.equals("")){
-            displayText.setText("Hello " + previous_name + "!");
+            Gson gson = new Gson();
+            displayText.setText("Hello " + gson.fromJson(previous_name, username.class).getText() + "!");
         }
         submitButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Log.i("testButton","Hi dad! "+name.getText());
+                Gson gson = new Gson();
                 SharedPreferences.Editor editor = sharedPreferences.edit();
-                editor.putString("name", ""+name.getText());
+                editor.putString("name", gson.toJson(new username(name.getText()+"")));
                 editor.apply();
                 displayText.setText("Hello " + name.getText() + "!");
             }
