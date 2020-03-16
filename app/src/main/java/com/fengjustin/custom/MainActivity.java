@@ -1,6 +1,7 @@
 package com.fengjustin.custom;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.viewpager.widget.ViewPager;
 
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -11,12 +12,19 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.EditText;
 
+import com.google.android.material.tabs.TabItem;
+import com.google.android.material.tabs.TabLayout;
 import com.google.gson.Gson;
 
 public class MainActivity extends AppCompatActivity {
     Button button0, button1, button2, button3, button4, button5, button6,
             button7, button8, button9, button10, divide, addition, subtract,
             multiply, clear, equal;
+    TabLayout tablay;
+    TabItem inf;
+    TabItem welc;
+    ViewPager viewpager;
+    PagerAdapter pageradapt;
     EditText edittext;
     EditText name;
     TextView displayText;
@@ -25,6 +33,7 @@ public class MainActivity extends AppCompatActivity {
     boolean add, sub, mult, div;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         button0 =  findViewById(R.id.button0);
@@ -48,6 +57,34 @@ public class MainActivity extends AppCompatActivity {
         name=findViewById(R.id.responseEditText);
         displayText=findViewById(R.id.textBox);
         submitButton=findViewById(R.id.clickButton);
+
+
+
+        viewpager = findViewById(R.id.viewp);
+//        calc=findViewById(R.id.calc);
+        inf=findViewById(R.id.info);
+        welc=findViewById(R.id.welc);
+        tablay=findViewById(R.id.tabBar);
+        pageradapt=new PagerAdapter(getSupportFragmentManager(), tablay.getTabCount());
+        viewpager.setAdapter(pageradapt);
+tablay.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+    @Override
+    public void onTabSelected(TabLayout.Tab tab) {
+        viewpager.setCurrentItem(tab.getPosition());
+    }
+
+    @Override
+    public void onTabUnselected(TabLayout.Tab tab) {
+
+    }
+
+    @Override
+    public void onTabReselected(TabLayout.Tab tab) {
+
+    }
+});
+
+
         final SharedPreferences sharedPreferences = getSharedPreferences("save_name", Context.MODE_PRIVATE);
         String previous_name = sharedPreferences.getString("name", "");
         if(!previous_name.equals("")){
@@ -71,7 +108,7 @@ public class MainActivity extends AppCompatActivity {
                 two = Float.parseFloat(edittext.getText() + "");
 
                 if (add == true) {
-                    edittext.setText(""+one + two );
+                    edittext.setText(""+(one + two) );
                     add = false;
                 }
 
